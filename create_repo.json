@@ -1,0 +1,8 @@
+{
+  "name": "yuque-mcp-lake-converter",
+  "description": "Enhanced Yuque MCP Server with Markdown → Lake auto-conversion. Perfect rendering for all Markdown elements.",
+  "private": false,
+  "has_issues": true,
+  "has_wiki": false,
+  "has_discussions": false
+}
