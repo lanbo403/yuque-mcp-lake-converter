@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { YuqueClient } from '../services/yuque-client.js';
 import { formatDocSummary, formatDoc } from '../utils/format.js';
+import { markdownToLake } from '../utils/converter.js';
 
 async function appendDocToToc(
   client: YuqueClient,
@@ -92,11 +93,20 @@ export const docTools = {
         public?: number;
       }
     ) => {
+      let body = args.body;
+      let format = args.format || 'markdown';
+
+      // 自动转换 Markdown → Lake
+      if (format === 'markdown' && body) {
+        body = markdownToLake(body);
+        format = 'lake';
+      }
+
       const data = {
         title: args.title,
         slug: args.slug,
-        body: args.body,
-        format: args.format,
+        body: body,
+        format: format,
         public: args.public,
       };
       const doc = await client.createDoc(args.repo_id, data);
