@@ -1,259 +1,142 @@
-# Yuque MCP Server
+# Yuque MCP Lake Converter
 
-[![CI](https://github.com/yuque/yuque-mcp-server/actions/workflows/ci.yml/badge.svg)](https://github.com/yuque/yuque-mcp-server/actions/workflows/ci.yml)
-[![npm version](https://img.shields.io/npm/v/yuque-mcp)](https://www.npmjs.com/package/yuque-mcp)
+<div align="center">
+
+**让语雀 MCP 工具支持 Markdown → Lake 自动转换**
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Yuque](https://img.shields.io/badge/Yuque-MCP%20Server-blue.svg)](https://github.com/yuque/yuque-mcp-server)
 
-[语雀](https://www.yuque.com/) MCP Server — 通过 [Model Context Protocol](https://modelcontextprotocol.io/) 让 AI 助手访问你的语雀知识库。
+[English](./README.md) | [中文文档](#)
 
-🌐 **[官网](https://yuque.github.io/yuque-ecosystem/)** · 📖 [API 文档](https://www.yuque.com/yuque/developer/api) · [English](./README.md)
-
----
-
-## 快速开始
-
-### 1. 获取语雀 API Token
-
-前往 [语雀开发者设置](https://www.yuque.com/settings/tokens) 创建个人访问令牌。
-
-### 2. 快速安装（推荐）
-
-使用内置 CLI 命令一键配置 MCP 客户端：
-
-```bash
-npx yuque-mcp install --token=YOUR_TOKEN --client=cursor
-```
-
-支持的客户端：`claude-desktop`、`vscode`、`cursor`、`windsurf`、`cline`、`trae`
-
-或使用交互式安装向导：
-
-```bash
-npx yuque-mcp setup
-```
-
-CLI 会自动找到对应操作系统的配置文件路径，与已有配置合并（不会覆盖其他服务器），并打印成功信息。
-
-### 3. 手动配置
-
-<details>
-<summary>偏好手动配置？点击展开所有客户端配置。</summary>
-
-选择你使用的客户端：
-
-<details open>
-<summary><b>Claude Code</b></summary>
-
-```bash
-claude mcp add yuque-mcp -- npx -y yuque-mcp --token=YOUR_TOKEN
-```
-
-或使用环境变量：
-
-```bash
-export YUQUE_PERSONAL_TOKEN=YOUR_TOKEN
-claude mcp add yuque-mcp -- npx -y yuque-mcp
-```
-
-</details>
-
-<details>
-<summary><b>Claude Desktop</b></summary>
-
-添加到 `claude_desktop_config.json`：
-
-- macOS：`~/Library/Application Support/Claude/claude_desktop_config.json`
-- Windows：`%APPDATA%\Claude\claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "yuque": {
-      "command": "npx",
-      "args": ["-y", "yuque-mcp"],
-      "env": {
-        "YUQUE_PERSONAL_TOKEN": "YOUR_TOKEN"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><b>VS Code (GitHub Copilot)</b></summary>
-
-添加到工作区的 `.vscode/mcp.json`：
-
-```json
-{
-  "servers": {
-    "yuque": {
-      "command": "npx",
-      "args": ["-y", "yuque-mcp"],
-      "env": {
-        "YUQUE_PERSONAL_TOKEN": "YOUR_TOKEN"
-      }
-    }
-  }
-}
-```
-
-然后在 GitHub Copilot Chat 中启用 Agent 模式。
-
-</details>
-
-<details>
-<summary><b>Cursor</b></summary>
-
-添加到 Cursor MCP 配置（`~/.cursor/mcp.json`）：
-
-```json
-{
-  "mcpServers": {
-    "yuque": {
-      "command": "npx",
-      "args": ["-y", "yuque-mcp"],
-      "env": {
-        "YUQUE_PERSONAL_TOKEN": "YOUR_TOKEN"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><b>Windsurf</b></summary>
-
-添加到 Windsurf MCP 配置（`~/.windsurf/mcp.json`）：
-
-```json
-{
-  "mcpServers": {
-    "yuque": {
-      "command": "npx",
-      "args": ["-y", "yuque-mcp"],
-      "env": {
-        "YUQUE_PERSONAL_TOKEN": "YOUR_TOKEN"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><b>Cline (VS Code)</b></summary>
-
-添加到 Cline MCP 配置（`~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`）：
-
-```json
-{
-  "mcpServers": {
-    "yuque": {
-      "command": "npx",
-      "args": ["-y", "yuque-mcp"],
-      "env": {
-        "YUQUE_PERSONAL_TOKEN": "YOUR_TOKEN"
-      }
-    }
-  }
-}
-```
-
-</details>
-
-<details>
-<summary><b>Trae</b></summary>
-
-在 Trae 中，打开 **设置**，进入 **MCP** 部分，添加一个 stdio 类型的 MCP Server，配置如下：
-
-- **Command:** `npx`
-- **Args:** `-y yuque-mcp`
-- **Env:** `YUQUE_PERSONAL_TOKEN=YOUR_TOKEN`
-
-详见 [Trae MCP 文档](https://docs.trae.ai/ide/model-context-protocol)。
-
-</details>
-
-> **更多客户端：** 任何支持 stdio 传输的 MCP 客户端均可使用 yuque-mcp。通用配置：command = `npx`，args = `["-y", "yuque-mcp"]`，env = `YUQUE_PERSONAL_TOKEN`。
-
-</details>
-
-### 4. 开始使用！
-
-让 AI 助手搜索语雀文档、创建文档、管理知识库。
+</div>
 
 ---
 
-## 认证方式
+## 📖 项目简介
 
-服务器支持多种方式提供语雀 API Token：
+本项目是对 [yuque-mcp-server](https://github.com/yuque/yuque-mcp-server) 的本地化增强版本，解决了原版 MCP 工具的两个关键问题：
 
-| 方式 | 环境变量 / 参数 | 说明 |
-|------|----------------|------|
-| **个人 Token**（推荐） | `YUQUE_PERSONAL_TOKEN` | 访问个人语雀账号 |
-| **团队 Token** | `YUQUE_GROUP_TOKEN` | 访问语雀团队 |
-| **旧版 Token** | `YUQUE_TOKEN` | 向后兼容 |
-| **CLI 参数** | `--token=YOUR_TOKEN` | 通过命令行参数传入 |
+1. ❌ **原版问题**：通过 API 创建的 Markdown 文档缺少 \`data-lake-id\` 等必要属性
+2. ✅ **本项目解决**：自动将 Markdown 转换为语雀 Lake 格式，完美保留所有格式
 
-**优先级：** `YUQUE_PERSONAL_TOKEN` > `YUQUE_GROUP_TOKEN` > `YUQUE_TOKEN` > `--token`
+### 核心特性
 
----
-
-## 可用工具（25 个）
-
-| 分类 | 工具 |
-|------|------|
-| **用户** | `yuque_get_user`、`yuque_list_groups` |
-| **搜索** | `yuque_search` |
-| **知识库** | `yuque_list_repos`、`yuque_get_repo`、`yuque_create_repo`、`yuque_update_repo`、`yuque_delete_repo` |
-| **文档** | `yuque_list_docs`、`yuque_get_doc`、`yuque_create_doc`、`yuque_update_doc`、`yuque_delete_doc` |
-| **目录** | `yuque_get_toc`、`yuque_update_toc` |
-| **版本** | `yuque_list_doc_versions`、`yuque_get_doc_version` |
-| **团队** | `yuque_list_group_members`、`yuque_update_group_member`、`yuque_remove_group_member` |
-| **统计** | `yuque_group_stats`、`yuque_group_member_stats`、`yuque_group_book_stats`、`yuque_group_doc_stats` |
-| **工具** | `yuque_hello` |
+- ✅ **自动转换**：Markdown → Lake 格式，无需手动操作
+- ✅ **完美渲染**：支持表格、列表、任务列表、链接、代码块等所有元素
+- ✅ **本地部署**：使用本地构建版本，无需等待 npm 更新
+- ✅ **一键回滚**：完善的备份和恢复机制
+- ✅ **即插即用**：配置一次，永久生效
 
 ---
 
-## 常见问题
+## 🎯 适用场景
 
-| 错误 | 解决方案 |
-|------|----------|
-| `YUQUE_PERSONAL_TOKEN is required` | 设置环境变量（`YUQUE_PERSONAL_TOKEN`、`YUQUE_GROUP_TOKEN` 或 `YUQUE_TOKEN`）或传入 `--token=YOUR_TOKEN` |
-| `401 Unauthorized` | Token 无效或已过期 — 到[语雀设置](https://www.yuque.com/settings/tokens)重新生成 |
-| `429 Rate Limited` | 请求过于频繁，等待后重试 |
-| 找不到工具 | 更新到最新版本：`npx -y yuque-mcp@latest` |
-| 找不到 `npx` 命令 | 安装 [Node.js](https://nodejs.org/)（v18 或更高版本） |
+### 适合使用
+
+- ✅ 使用 Claude Code + 语雀进行知识管理
+- ✅ 需要通过 API 批量创建语雀文档
+- ✅ 希望文档完美保留 Markdown 格式
+- ✅ 需要自定义 MCP 工具行为
+
+### 不适合使用
+
+- ❌ 只使用语雀网页端编辑器
+- ❌ 不使用 MCP 协议工具
+- ❌ 对格式要求不高
 
 ---
 
-## 开发
+## 🚀 快速开始
 
-```bash
+### 前置要求
+
+- Node.js >= 18
+- npm 或 yarn
+- 语雀账号和 [Personal Access Token](https://www.yuque.com/settings/tokens)
+
+### 5 分钟部署
+
+\`\`\`bash
+# 1. 克隆原仓库
 git clone https://github.com/yuque/yuque-mcp-server.git
 cd yuque-mcp-server
+
+# 2. 安装依赖
 npm install
-npm test              # 运行测试
-npm run build         # 编译 TypeScript
-npm run dev           # 开发模式（热重载）
-```
+
+# 3. 安装额外依赖
+npm install marked dompurify jsdom @types/jsdom --save
+
+# 4. 复制转换器文件
+# 将本项目 src/utils/converter.ts 复制到对应位置
+
+# 5. 修改 src/tools/doc.ts
+# 在 yuque_create_doc handler 中添加转换逻辑
+
+# 6. 构建项目
+npm run build
+
+# 7. 配置 Claude Code
+# 修改 .mcp.json 指向本地构建版本
+\`\`\`
+
+**详细步骤请查看**：[docs/LAKE_CONVERTER_GUIDE.md](./docs/LAKE_CONVERTER_GUIDE.md)
 
 ---
 
-## 链接
+## 🔧 核心功能
 
-- [官网](https://yuque.github.io/yuque-ecosystem/)
-- [语雀 API 文档](https://www.yuque.com/yuque/developer/api)
-- [MCP 协议](https://modelcontextprotocol.io/)
-- [MCP Registry](https://github.com/modelcontextprotocol/servers)
-- [贡献指南](./CONTRIBUTING.md)
+### 自动转换示例
 
-## 许可证
+**输入**：
+\`\`\`javascript
+{
+  format: "markdown",
+  body: "# 标题\n\n**粗体**"
+}
+\`\`\`
+
+**输出**（自动）：
+\`\`\`html
+{
+  format: "lake",
+  body: "<h1 data-lake-id=\\\"xxx\\"><span>标题</span></h1>..."
+}
+\`\`\`
+
+---
+
+## 📚 文档导航
+
+| 文档 | 说明 |
+|------|------|
+| [docs/LAKE_CONVERTER_GUIDE.md](./docs/LAKE_CONVERTER_GUIDE.md) | 完整功能指南 |
+| [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) | 实施总结 |
+| [VERIFICATION_GUIDE.md](./VERIFICATION_GUIDE.md) | 验证指南 |
+
+---
+
+## 💡 使用技巧
+
+### 日常使用
+
+1. **写作**：使用 Markdown
+2. **导入**：使用 Lake 格式
+3. **批量**：使用脚本
+
+---
+
+## 📄 许可证
 
 [MIT](./LICENSE)
+
+---
+
+<div align="center">
+
+**⭐ 如果这个项目对你有帮助，请给个 Star！**
+
+Made with ❤️ by [lanbo403](https://github.com/lanbo403)
+
+</div>
